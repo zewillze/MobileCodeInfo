@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">MobileCodeInfo</string>
+    <string name="main_title">请输入手机号</string>
+    <string name="city">城市:</string>
+    <string name="province">省份:</string>
+    <string name="codeType">卡型:</string>
+
+</resources>
