@@ -35,17 +35,13 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
 
     }
 
-
-
-
-
     private void buildUI(){
         numberText = (TextView)findViewById(R.id.number_text);
         provinceText = (TextView)findViewById(R.id.province_text);
         cityText = (TextView)findViewById(R.id.city_text);
         typeText = (TextView)findViewById(R.id.type_text);
 
-
+//       Set watcher
         numberText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -61,7 +57,11 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
             public void afterTextChanged(Editable s) {
 
                 if (s.length() == 11) {
+                    /* Request Info */
                     fetchCodeInfo(s.toString());
+                }
+                else if(s.length() == 0){
+                    clearnUI();
                 }
             }
         });
@@ -72,6 +72,12 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
         api = new FetchInfoApi();
         api.delegate = this;
         api.execute(code.toString());
+    }
+
+    private void clearnUI(){
+        provinceText.setText("");
+        cityText.setText("");
+        typeText.setText("");
     }
     @Override
     public void didFinishFetchInfo(InfoModel model) {
