@@ -12,12 +12,18 @@ public class InfoModel {
     public String prefix;
     public String supplier;
     public String suit;
+    public String jsonString;
 
+
+    public InfoModel(){
+
+    }
 
     public InfoModel(JSONObject object){
 
         try {
             JSONObject data = object.getJSONObject("retData");
+            this.jsonString = data.toString();
             this.phone = data.getString("phone");
             this.prefix = data.getString("prefix");
             this.supplier = data.getString("supplier");
@@ -29,6 +35,13 @@ public class InfoModel {
             e.printStackTrace();
         }
 
+    }
+    public String getJsonString() {
+        return jsonString;
+    }
+
+    public void setJsonString(String jsonString) {
+        this.jsonString = jsonString;
     }
 
 

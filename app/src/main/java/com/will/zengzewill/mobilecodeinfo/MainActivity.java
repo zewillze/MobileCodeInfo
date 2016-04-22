@@ -5,12 +5,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.app.ListActivity;
 
 import com.will.zengzewill.mobilecodeinfo.api.FetchInfoApi;
+import com.will.zengzewill.mobilecodeinfo.database.MobileDataSource;
 import com.will.zengzewill.mobilecodeinfo.model.InfoModel;
 import com.will.zengzewill.mobilecodeinfo.protocol.MobileCodeInfoDelegate;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements MobileCodeInfoDelegate{
 
@@ -20,7 +25,14 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
     private TextView cityText;
     private TextView typeText;
 
+    private ListView listView;
+
+
     private FetchInfoApi api;
+    private MobileDataSource dataSource;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +42,12 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
 
 //        Build UI
         buildUI();
+        dataSource = new MobileDataSource(this);
+        dataSource.open();
 
+        List<InfoModel> values = dataSource.getAllInfos();
+
+        ArrayAdapter<InfoModel> adapter = new ArrayAdapter<InfoModel>(this, android.R.layout.simple_list_item_1, values);
 
 
     }
@@ -40,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
         provinceText = (TextView)findViewById(R.id.province_text);
         cityText = (TextView)findViewById(R.id.city_text);
         typeText = (TextView)findViewById(R.id.type_text);
+        listView = (ListView)findViewById(R.id.list);
+
 
 //       Set watcher
         numberText.addTextChangedListener(new TextWatcher() {
@@ -96,6 +115,6 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
     public void bindData(InfoModel model){
         provinceText.setText(model.province);
         cityText.setText(model.city);
-        typeText.setText(model.suit);
+        typeText.setText(model.supplier + "-" + model.suit);
     }
 }
