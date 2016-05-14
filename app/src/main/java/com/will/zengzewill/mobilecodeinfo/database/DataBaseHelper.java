@@ -14,12 +14,14 @@ public class DataBaseHelper extends SQLiteOpenHelper{
     public static final String COLUMN_ID = "id";
 
     public static final String JSON_STRING = "jsonString";
+    public static final String PHONE_NUM = "phone_number";
 
     private static final String DATABASE_NAME = "mobile.db";
     private static final int DATABASE_VERSION = 1;
 
     private static final String DATABASE_CREATE = "create table "
-            + TABLE_COMMENTS + "("+COLUMN_ID+" integer primary key autoincrement,"+ JSON_STRING+" text not null);";
+            + TABLE_COMMENTS + "("+COLUMN_ID+" integer primary key autoincrement,"+ JSON_STRING+" text not null, " + PHONE_NUM + " text not null);";
+
 
 
 

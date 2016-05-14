@@ -18,7 +18,7 @@ import java.util.List;
 public class MobileDataSource {
     private SQLiteDatabase database;
     private DataBaseHelper dataBaseHelper;
-    private String[] allColumn = {DataBaseHelper.COLUMN_ID, DataBaseHelper.JSON_STRING};
+    private String[] allColumn = {DataBaseHelper.COLUMN_ID, DataBaseHelper.JSON_STRING, DataBaseHelper.PHONE_NUM};
 
     public MobileDataSource(Context context){
         dataBaseHelper = new DataBaseHelper(context);
@@ -33,9 +33,10 @@ public class MobileDataSource {
     }
 
 
-    public InfoModel createInfo(String jsoninfo){
+    public InfoModel createInfo(String jsoninfo, String phone){
         ContentValues values = new ContentValues();
         values.put(DataBaseHelper.JSON_STRING, jsoninfo);
+        values.put(DataBaseHelper.PHONE_NUM, phone);
         long insertId = database.insert(DataBaseHelper.TABLE_COMMENTS, null, values);
         Cursor cursor = database.query(DataBaseHelper.TABLE_COMMENTS, allColumn, DataBaseHelper.COLUMN_ID + "=" + insertId, null, null, null, null);
         cursor.moveToFirst();
@@ -64,7 +65,9 @@ public class MobileDataSource {
 
     private InfoModel cursorToInfoModel(Cursor cursor){
         InfoModel model = new InfoModel();
+
         model.setJsonString(cursor.getString(1));
+        model.setPhone(cursor.getString(2));
         return model;
     }
 }

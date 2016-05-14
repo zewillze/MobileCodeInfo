@@ -5,11 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.app.ListActivity;
 
+import com.will.zengzewill.mobilecodeinfo.adaper.MobileAdapter;
 import com.will.zengzewill.mobilecodeinfo.api.FetchInfoApi;
 import com.will.zengzewill.mobilecodeinfo.database.MobileDataSource;
 import com.will.zengzewill.mobilecodeinfo.model.InfoModel;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
     private FetchInfoApi api;
     private MobileDataSource dataSource;
 
-
+    private MobileAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +44,11 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
 
 //        Build UI
         buildUI();
+
         dataSource = new MobileDataSource(this);
         dataSource.open();
 
-        List<InfoModel> values = dataSource.getAllInfos();
 
-        ArrayAdapter<InfoModel> adapter = new ArrayAdapter<InfoModel>(this, android.R.layout.simple_list_item_1, values);
 
 
     }
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
         provinceText = (TextView)findViewById(R.id.province_text);
         cityText = (TextView)findViewById(R.id.city_text);
         typeText = (TextView)findViewById(R.id.type_text);
-        listView = (ListView)findViewById(R.id.list);
+        listView = (ListView)findViewById(R.id.infoList);
 
 
 //       Set watcher
@@ -78,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
                 if (s.length() == 11) {
                     /* Request Info */
                     fetchCodeInfo(s.toString());
-                }
-                else if(s.length() == 0){
+                } else if (s.length() == 0) {
                     clearnUI();
                 }
             }
@@ -116,5 +116,15 @@ public class MainActivity extends AppCompatActivity implements MobileCodeInfoDel
         provinceText.setText(model.province);
         cityText.setText(model.city);
         typeText.setText(model.supplier + "-" + model.suit);
+
+        dataSource.createInfo(model.getJsonString(), model.getPhone());
+        List<InfoModel> models = dataSource.getAllInfos();
+        updateHistory(models);
+    }
+
+    private void updateHistory(List<InfoModel> models){
+        adapter = new MobileAdapter(this, models);
+        listView.setAdapter(adapter);
+
     }
 }
